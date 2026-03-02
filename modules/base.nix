@@ -12,11 +12,6 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  imports = lib.optionals config.stereos.vm.enable [
-    # Loads virtio kernel modules, QEMU guest agent, etc.
-    "${modulesPath}/profiles/qemu-guest.nix"
-  ];
-
   config = lib.mkMerge [
     # -- Always-on config (safe for any NixOS system) --------------------------
     {
@@ -95,6 +90,10 @@
 
     # -- VM-only config (dedicated stereOS VM) ---------------------------------
     (lib.mkIf config.stereos.vm.enable {
+      # QEMU guest agent and virtio support (equivalent to qemu-guest.nix profile).
+      # Cannot use conditional imports (infinite recursion), so inline the config.
+      services.qemuGuest.enable = lib.mkDefault true;
+
       # NixOS system version to track
       system.stateVersion = "24.11";
 
