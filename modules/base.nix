@@ -63,27 +63,6 @@
         allowedTCPPorts = [ 22 ];  # SSH
       };
 
-      # -- Kernel hardening ---------------------------------------------------
-      boot.kernel.sysctl = {
-        # Restrict process tracing (blocks ptrace-based attacks)
-        "kernel.yama.ptrace_scope" = lib.mkDefault 2;
-
-        # Hide kernel pointers from non-root
-        "kernel.kptr_restrict" = lib.mkDefault 2;
-
-        # Restrict dmesg to root
-        "kernel.dmesg_restrict" = lib.mkDefault 1;
-
-        # Disable core dumps via pipe
-        "kernel.core_pattern" = lib.mkDefault "|/bin/false";
-
-        # Network hardening
-        "net.ipv4.conf.all.accept_redirects" = lib.mkDefault 0;
-        "net.ipv4.conf.default.accept_redirects" = lib.mkDefault 0;
-        "net.ipv6.conf.all.accept_redirects" = lib.mkDefault 0;
-        "net.ipv4.conf.all.send_redirects" = lib.mkDefault 0;
-      };
-
       # -- Ensure /tmp is tmpfs (ephemeral, never written to disk) ------------
       boot.tmp.useTmpfs = lib.mkDefault true;
     }
@@ -93,6 +72,18 @@
       # QEMU guest agent and virtio support (equivalent to qemu-guest.nix profile).
       # Cannot use conditional imports (infinite recursion), so inline the config.
       services.qemuGuest.enable = lib.mkDefault true;
+
+      # -- Kernel hardening (VM-only to avoid conflicts with host sysctl) ----
+      boot.kernel.sysctl = {
+        "kernel.yama.ptrace_scope" = lib.mkDefault 2;
+        "kernel.kptr_restrict" = lib.mkDefault 2;
+        "kernel.dmesg_restrict" = lib.mkDefault 1;
+        "kernel.core_pattern" = lib.mkDefault "|/bin/false";
+        "net.ipv4.conf.all.accept_redirects" = lib.mkDefault 0;
+        "net.ipv4.conf.default.accept_redirects" = lib.mkDefault 0;
+        "net.ipv6.conf.all.accept_redirects" = lib.mkDefault 0;
+        "net.ipv4.conf.all.send_redirects" = lib.mkDefault 0;
+      };
 
       # NixOS system version to track
       system.stateVersion = "24.11";
