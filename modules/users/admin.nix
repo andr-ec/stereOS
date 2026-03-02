@@ -5,11 +5,13 @@
 #
 # The admin group controls access to stereosd/agentd sockets and tmux
 # sessions.  Privilege hierarchy: root > admin > agent.
+#
+# Guarded by stereos.users.enable.
 
 { config, lib, pkgs, ... }:
 
 {
-  config = {
+  config = lib.mkIf config.stereos.users.enable {
     # -- Admin group ---------------------------------------------------------
     users.groups.admin = {};
 
@@ -23,7 +25,7 @@
     # -- Sudo configuration --------------------------------------------------
     security.sudo = {
       enable = true;
-      wheelNeedsPassword = false;  # Admin gets passwordless sudo
+      wheelNeedsPassword = lib.mkDefault false;  # Admin gets passwordless sudo
     };
   };
 }

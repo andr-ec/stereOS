@@ -11,21 +11,26 @@
 #
 # Also declares the shared stereos.ssh and stereos.agent options used
 # by both the agent and admin user modules.
+#
+# Guarded by stereos.users.enable — the options are always available but
+# user/group creation only happens when enabled.
 
 { config, lib, pkgs, ... }:
 
 let
+  cfg = config.stereos;
+
   # Build a single directory containing symlinks to all approved binaries
   agentEnv = pkgs.buildEnv {
     name = "stereos-agent-env";
-    paths = config.stereos.agent.basePackages;
+    paths = cfg.agent.basePackages;
     pathsToLink = [ "/bin" "/lib" "/share" "/etc" ];
   };
 
   # Build secondary env from feature module packages
   extraEnv = pkgs.buildEnv {
     name = "stereos-agent-extra-env";
-    paths = config.stereos.agent.extraPackages;
+    paths = cfg.agent.extraPackages;
     pathsToLink = [ "/bin" ];
   };
 
@@ -54,7 +59,7 @@ let
 
 in
 {
-  # -- Options ---------------------------------------------------------------
+  # -- Options (always available, regardless of stereos.users.enable) ----------
   options.stereos = {
     ssh.authorizedKeys = lib.mkOption {
       type = lib.types.listOf lib.types.str;
@@ -119,7 +124,7 @@ in
     };
   };
 
-  config = {
+  config = lib.mkIf cfg.users.enable {
     # Register the custom shell so NixOS accepts it as a valid login shell
     environment.shells = [ "${agentShell}/bin/stereos-agent-shell" ];
 
@@ -133,7 +138,7 @@ in
       home = "/home/agent";
       shell = "${agentShell}/bin/stereos-agent-shell";
       extraGroups = [];
-      openssh.authorizedKeys.keys = config.stereos.ssh.authorizedKeys;
+      openssh.authorizedKeys.keys = cfg.ssh.authorizedKeys;
     };
 
     # -- ~/workspace: the agent's writable working directory ------------------

@@ -15,10 +15,13 @@
 #
 # Verification: check /run/stereos-ready for a Unix nanosecond timestamp
 # written by the stereos-ready.service unit once multi-user.target is reached.
+#
+# Guarded by stereos.boot.enable — disable when importing into an existing
+# NixOS system that has its own boot configuration.
 
 { config, lib, pkgs, ... }:
 
-{
+lib.mkIf config.stereos.boot.enable {
   # -- Boot ------------------------------------------------------------------
   # efiInstallAsRemovable puts GRUB at /EFI/BOOT/BOOTAA64.EFI,
   # which is the fallback path QEMU's UEFI firmware searches.

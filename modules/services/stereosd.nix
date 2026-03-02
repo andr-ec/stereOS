@@ -54,10 +54,10 @@
 
       serviceConfig = {
         # Override: stereosd needs to run as root in stereOS because it must:
-        #   - Bind to AF_VSOCK sockets
+        #   - Bind to AF_VSOCK sockets (in VM mode)
         #   - Mount/unmount shared filesystems (CAP_SYS_ADMIN)
         #   - Write secrets to /run/stereos/secrets (root-owned)
-        #   - Initiate system poweroff during shutdown
+        #   - Initiate system poweroff during shutdown (in VM mode)
         DynamicUser = lib.mkForce false;
 
         Restart = lib.mkForce "on-failure";
