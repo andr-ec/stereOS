@@ -13,7 +13,7 @@
     };
 
     stereosd = {
-      url = "github:papercomputeco/stereosd";
+      url = "github:andr-ec/stereosd/native-support";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
