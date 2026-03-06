@@ -44,7 +44,7 @@
     # -- stereOS-specific service overrides ----------------------------------
     systemd.services.stereosd = {
       # mount and umount are needed for shared directory mounting
-      path = [ pkgs.util-linux pkgs.coreutils pkgs.acl ];
+      path = [ pkgs.util-linux pkgs.coreutils pkgs.bindfs ];
 
       # Ensure kernel modules (including vmw_vsock_virtio_transport) are
       # loaded before stereosd starts. Without this, stereosd's
