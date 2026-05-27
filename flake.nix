@@ -13,7 +13,7 @@
     };
 
     stereosd = {
-      url = "github:andr-ec/stereosd/native-support";
+      url = "github:andr-ec/stereosd/feat/per-sandbox-users";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
