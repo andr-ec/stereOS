@@ -246,11 +246,11 @@
         "skills": "skills"
       },
       "locked": {
-        "lastModified": 1779870343,
-        "narHash": "sha256-B7e/C6MuAlZwapj+enj2XS6aQyn3z4ZMOjBoBguz6UY=",
+        "lastModified": 1779871045,
+        "narHash": "sha256-PMuRO8kBjCp5SVWpzpfXxzOXjCPe6u0BTiegnaeNwKM=",
         "owner": "andr-ec",
         "repo": "stereosd",
-        "rev": "c39486915cabada153d127860a8a234f436c54ef",
+        "rev": "e5fbd412d4c87c583d70ba1c97d22353701382df",
         "type": "github"
       },
       "original": {
