@@ -43,8 +43,19 @@
 
     # -- stereOS-specific service overrides ----------------------------------
     systemd.services.stereosd = {
-      # mount and umount are needed for shared directory mounting
-      path = [ pkgs.util-linux pkgs.coreutils pkgs.bindfs ];
+      # mount/umount      : shared directory mounting
+      # bindfs            : per-share bindfs with --force-user
+      # iproute2          : `ip netns add/del` for per-sandbox netns
+      # shadow            : useradd/userdel for per-sandbox sb-<name> users
+      # procps            : pkill/pgrep for SIGKILLing user procs on destroy
+      path = [
+        pkgs.util-linux
+        pkgs.coreutils
+        pkgs.bindfs
+        pkgs.iproute2
+        pkgs.shadow
+        pkgs.procps
+      ];
 
       # Ensure kernel modules (including vmw_vsock_virtio_transport) are
       # loaded before stereosd starts. Without this, stereosd's
