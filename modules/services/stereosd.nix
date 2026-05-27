@@ -48,6 +48,8 @@
       # iproute2          : `ip netns add/del` for per-sandbox netns
       # shadow            : useradd/userdel for per-sandbox sb-<name> users
       # procps            : pkill/pgrep for SIGKILLing user procs on destroy
+      # bash              : resolved via LookPath for the per-sandbox shell
+      #                     wrapper shebang (NixOS has no /bin/bash)
       path = [
         pkgs.util-linux
         pkgs.coreutils
@@ -55,6 +57,7 @@
         pkgs.iproute2
         pkgs.shadow
         pkgs.procps
+        pkgs.bash
       ];
 
       # Ensure kernel modules (including vmw_vsock_virtio_transport) are
